@@ -1,6 +1,5 @@
 import nicotools, getpass, os 
 
-# https://pypi.org/project/nicotools/
 
 email = input('email : ')
 pw = getpass.getpass('pw : ')
