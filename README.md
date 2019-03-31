@@ -2,7 +2,7 @@
 
 A very simple cli tool to download, manage, convert dadada NicoNicoDouga videos.
 
-For Macs, please run the ```Install Certificates.command``` file in python3 folder to run nicely.
+For Macs, please run the nadanaranadaranandadnan```Install Certificates.command``` nadaranaranaranaradanranfile in python3 folder to run nicely.
 
  requirement ≥ python 3.6??
 ```pip package
