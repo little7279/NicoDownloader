@@ -59,7 +59,7 @@ def VideoToMusic():
 
 def Press_B_to_Blow():
     clearchang()
-    for c in ("now exiting "+"nico "*count+"douga."):
+    for c in ("now exiting "+"nico "*count+"douga downloader."):
         time.sleep(0.1)
         print(c, end='', flush=True)
     time.sleep(3)
@@ -80,10 +80,13 @@ if __name__ == "__main__":
             selections.get( input('SELECT[1-3] : '))()
         except TypeError:
             pass
-    
-# while True:
+
 #     # os.rename(DIR+file_list[n], DIR_M+file_list[n])
 #     os.mkdir('./Music')
 #     shutil.move(name , DIR_M+name)
 #     print('Video -> Music Complete')
 
+'''
+/search/검색어
+/watch/sm34388038
+'''
