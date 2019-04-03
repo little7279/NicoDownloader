@@ -1,6 +1,6 @@
 import ffmpeg, moviepy.editor as mp
 from nicotools.download import Video
-import getpass, os, sys, time, asyncio, shutil
+import getpass, os, sys, time, logging
 '''
 required packages:
     1. nicotools
@@ -8,50 +8,66 @@ required packages:
     3. ffmpeg
 '''
 
-# -> 고유번호 : sm5865063
+'''
+/search/검색어
+/watch/sm34388038
+'''
+# -> 고유번호 : sm5865063, sm34503384
 
 dir_path = "./Downloads/"
 converted_path = "./Converted/"
 count = 0
 clearchang = lambda: os.system('cls') if sys.platform is "win32" else os.system("clear")
 
+
 def VideoDownload():
-    clearchang()
+    print('[Login]')
     mail = input('EMAIL : ')
     password = getpass.getpass('PW : ')
+
+    clearchang()
+    sm = input("SM number (without 'sm') : ") # TODO : give 3 attempts
+
     # Video(["sm"+input("SM number (without 'sm') : "),"sm5865063"], save_dir=dir_path, mail=mail, password=password).start() # RuntimeError: Session is closed.
-    os.system('nicotools  download --mail "{0}" --pass "{1}" -v "sm{2}" -d "{3}"'.format(mail, password, input("SM number (without 'sm') : "), dir_path));print("")
+    # TODO : get target vid name, compare it to directory files, if overlaps, dont download
+
+    os.system('nicotools  download --mail "{0}" --pass "{1}" -v "sm{2}" -d "{3}"'.format(mail, password, sm, dir_path));print("")
 
 def VideoToMusic():
-    """
-    0. ./Downloads 폴더 안에 있는 파일 나열
-    1.  변환할 파일 선택
-    2.  변환후 ./Music로 이동
-    """
     file_list = [e for e in os.listdir(dir_path) if not e.startswith('.')]
     clearchang()
     print('== FileList ==')
     for i,list in enumerate(file_list):
         print('{0}. {1}'.format(i+1,list))
+    print("q : quit")
 
-    n = int(input('NUMBER : '))-1
+    n = input('NUMBER : ')
+    if n=="q":
+        return
 
+    n=int(n)-1
     clip = mp.VideoFileClip(dir_path+file_list[n]).subclip(0, -1)
     music = file_list[n].replace(file_list[n].split(".")[1], 'mp3')
 
     try:  
         os.mkdir(converted_path)
     except OSError:  
-        print("!! Directory Exists. !!") # TODO : USE LOGGER INSTEAD OF PRINT FUNCTION
+        logging.warning("!! Directory Path Exists. !!")
 
-    clip.audio.write_audiofile(converted_path+music)
-
-    try:
-        os.remove(dir_path+file_list[n])
-    except OSError:
-        print("Original file does not exist.") # TODO : USE LOGGER INSTEAD OF PRINT FUNCTION
+    if not os.path.isfile(converted_path+music):
+        clip.audio.write_audiofile(converted_path+music)
     else:
-        print("Original file Successfully removed.") # TODO : USE LOGGER INSTEAD OF PRINT FUNCTION
+        logging.warning("!! File already Exists. !!")
+        time.sleep(2)
+        return
+    
+    if input("Delete the Original file downloaded? (Y/N)").lower() == "y":
+        # try:
+        os.remove(dir_path+file_list[n])
+        # except OSError:
+        #     logging.warning("Original file does not exist.") # will this ever happen..
+        # else:
+        logging.info("Original file Successfully removed.")
 
     print('Video -> Music Complete')
     time.sleep(3)
@@ -68,6 +84,7 @@ def Press_B_to_Blow():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     while True:
         count+=1
         selections = {'1': VideoDownload, '2': VideoToMusic, 'q':Press_B_to_Blow, }
@@ -75,7 +92,7 @@ if __name__ == "__main__":
           '1. Video Download\n'
           '2. Video -> Music\n'
           '3. MyList\n'
-          '4. Exit\n')
+          'q. Exit\n')
         try:
             selections.get( input('SELECT[1-3] : '))()
         except TypeError:
@@ -85,8 +102,3 @@ if __name__ == "__main__":
 #     os.mkdir('./Music')
 #     shutil.move(name , DIR_M+name)
 #     print('Video -> Music Complete')
-
-'''
-/search/검색어
-/watch/sm34388038
-'''
