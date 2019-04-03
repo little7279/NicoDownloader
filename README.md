@@ -12,4 +12,3 @@ For Macs, please run the nadanaranadaranandadnan```Install Certificates.command`
 > https://github.com/mo-san/niconico-tools 
 
 > https://github.com/Zulko/moviepy
-dandandandnadnandnadndndandararnarnarndandnara
